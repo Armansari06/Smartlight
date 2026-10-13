@@ -125,7 +125,6 @@ if (connectionText) { connectionText.textContent = "Demo Mode"; }
 
 console.log( "SmartFix logged in:", user.email );
 console.log("Logged-in User UID:", user.uid);
-Ab tumhara code is tarah dikhega:
 
 onAuthStateChanged(
     auth,
