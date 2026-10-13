@@ -64,7 +64,7 @@ function getFriendlyError(code) { const messages = { "auth/invalid-email": "Emai
 
 "auth/internal-error": "Firebase mein internal error aaya. Console check karo." };
 
-return messages[code] || Login failed: ${code || "Unknown error"}; }
+return messages[code] || ("Login failed: " + (code || "Unknown error"));
 
 // ======================================== // LOGIN FORM // ========================================
 
