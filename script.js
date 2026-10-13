@@ -128,7 +128,30 @@ async function loadCustomerHome(user) {
     cleanupListeners();
 
     // Each Firebase UID must be assigned to its home by an administrator.
-    const assignmentSnapshot = await get(ref(database, `userHomes/${user.uid}`));
+    let assignmentSnapshot;
+
+try {
+    assignmentSnapshot = await get(
+        ref(database, `userHomes/${user.uid}`)
+    );
+} catch (error) {
+    console.error("UID mapping read failed:", error.code, error.message);
+    throw new Error(
+        error.code === "PERMISSION_DENIED"
+            ? "Database permission denied. Firebase Rules check karo."
+            : "Customer assignment read nahi ho saka."
+    );
+}
+
+console.log("Logged-in UID:", user.uid);
+console.log("Assignment exists:", assignmentSnapshot.exists());
+console.log("Assigned home:", assignmentSnapshot.val());
+
+if (!assignmentSnapshot.exists()) {
+    throw new Error(
+        "Is UID ke liye userHomes mein ghar assign nahi hai. Database key check karo."
+    );
+}
 
     if (!assignmentSnapshot.exists()) {
         throw new Error("Is account ko abhi kisi ghar se assign nahi kiya gaya hai.");
