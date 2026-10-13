@@ -179,26 +179,61 @@ if (powerButton) { powerButton.setAttribute( "aria-pressed", String(lightIsOn) )
 
 powerButton.classList.toggle( "is-on", lightIsOn ); } }
 
-// ======================================== // ACTIVITY HISTORY // ========================================
+// ========================================
+// ACTIVITY HISTORY
+// ========================================
 
-function renderHistory() { if (!activityList) return;
+function renderHistory() {
+    if (!activityList) return;
 
-if (activityHistory.length === 0) { activityList.innerHTML = <div class="empty-state"> <span>◷</span> <p>No activity yet.</p> </div> ;
+    if (activityHistory.length === 0) {
+        activityList.innerHTML = `
+            <div class="empty-state">
+                <span>◷</span>
+                <p>No activity yet.</p>
+            </div>
+        `;
+        return;
+    }
 
-return; }
+    activityList.innerHTML = activityHistory.map(item => {
+        const isOn = item.on === true;
 
-activityList.innerHTML = activityHistory .map((item) => { const isOn = item.on === true;
+        return `
+            <div class="activity-item">
+                <div>
+                    <strong>
+                        ${isOn ? "💡 Light turned ON" : "🌙 Light turned OFF"}
+                    </strong>
+                    <small>${escapeHTML(item.time)}</small>
+                </div>
 
-return ` <div class="activity-item"> <div> <strong> ${isOn ? "💡 Light turned ON" : "🌙 Light turned OFF"} </strong>
+                <span class="activity-result ${isOn ? "on" : "off"}">
+                    ${isOn ? "ON" : "OFF"}
+                </span>
+            </div>
+        `;
+    }).join("");
+}
 
-<small>${escapeHTML(item.time)}</small> </div>
 
-<span class="activity-result ${isOn ? "on" : "off"}"> ${isOn ? "ON" : "OFF"} </span> </div> `; }) .join(""); }
+// ========================================
+// ESCAPE HTML
+// ========================================
 
-// Escape user-controlled text before inserting into HTML. function escapeHTML(value) { return String(value).replace(/[&<>"']/g, (character) => { const entities = { "&": "&", "<": "<", ">": ">", '"': """, "'": "'" };
+function escapeHTML(value) {
+    const entities = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    };
 
-return entities[character]; }); }
-
+    return String(value).replace(/[&<>"']/g, character => {
+        return entities[character];
+    });
+}
 // ======================================== // LIGHT CONTROL - DEMO ONLY // ========================================
 
 if (powerButton) { powerButton.addEventListener("click", () => { lightIsOn = !lightIsOn;
