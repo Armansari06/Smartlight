@@ -42,29 +42,30 @@ authMessage.textContent = message;
 
 authMessage.style.color = isError ? "#fb7185" : "#22c55e"; }
 
-// ======================================== // FRIENDLY FIREBASE ERRORS // ========================================
+// ========================================
+// FRIENDLY FIREBASE ERRORS
+// ========================================
 
-function getFriendlyError(code) { const messages = { "auth/invalid-email": "Email address sahi nahi hai.",
+function getFriendlyError(code) {
+    const messages = {
+        "auth/invalid-email": "Email address sahi nahi hai.",
+        "auth/invalid-credential": "Email ya password galat hai.",
+        "auth/user-not-found": "Is email se account nahi mila.",
+        "auth/wrong-password": "Password galat hai.",
+        "auth/too-many-requests": "Bahut attempts hue. Thodi der baad try karo.",
+        "auth/network-request-failed": "Internet connection check karo.",
+        "auth/operation-not-allowed": "Firebase mein Email/Password sign-in enable karo.",
+        "auth/invalid-api-key": "Firebase API key check karo.",
+        "auth/unauthorized-domain": "Firebase Authentication ke Authorized domains mein website ka domain add karo.",
+        "auth/internal-error": "Firebase mein internal error aaya. Console check karo."
+    };
 
-"auth/invalid-credential": "Email ya password galat hai.",
+    if (messages[code]) {
+        return messages[code];
+    }
 
-"auth/user-not-found": "Is email se account nahi mila.",
-
-"auth/wrong-password": "Password galat hai.",
-
-"auth/too-many-requests": "Bahut attempts hue. Thodi der baad try karo.",
-
-"auth/network-request-failed": "Internet connection check karo.",
-
-"auth/operation-not-allowed": "Firebase mein Email/Password sign-in enable karo.",
-
-"auth/invalid-api-key": "Firebase API key check karo.",
-
-"auth/unauthorized-domain": "Firebase Authentication ke Authorized domains mein is website ka domain add karo.",
-
-"auth/internal-error": "Firebase mein internal error aaya. Console check karo." };
-
-return messages[code] || ("Login failed: " + (code || "Unknown error"));
+    return "Login failed: " + String(code || "Unknown error");
+}
 
 // ======================================== // LOGIN FORM // ========================================
 
