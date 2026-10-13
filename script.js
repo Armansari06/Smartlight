@@ -32,20 +32,40 @@ if (!email || !password) { showMessage("Email aur password dono bharo.", true); 
 
 loginButton.disabled = true; showMessage("Logging in...");
 
-try { await signInWithEmailAndPassword(auth, email, password);
+try {
+    await signInWithEmailAndPassword(auth, email, password);
 
-showMessage("Login successful!");
+    showMessage("Login successful!");
 
-loginForm.reset();
+    loginForm.reset();
 
-} catch (error) { console.error("Firebase login error:", error.code, error.message);
+} catch (error) {
+    console.error(
+        "Firebase login error:",
+        error.code,
+        error.message
+    );
 
-const messages = { "auth/invalid-email": "Email address sahi nahi hai.", "auth/invalid-credential": "Email ya password galat hai.", "auth/user-not-found": "Is email se account nahi mila.", "auth/wrong-password": "Password galat hai.", "auth/too-many-requests": "Bahut attempts hue. Thodi der baad try karo.", "auth/network-request-failed": "Internet connection check karo.", "auth/operation-not-allowed": "Firebase mein Email/Password sign-in enable karo.", "auth/invalid-api-key": "Firebase API key check karo." };
+    const messages = {
+        "auth/invalid-email": "Email address sahi nahi hai.",
+        "auth/invalid-credential": "Email ya password galat hai.",
+        "auth/user-not-found": "Is email se account nahi mila.",
+        "auth/wrong-password": "Password galat hai.",
+        "auth/too-many-requests": "Bahut attempts hue. Thodi der baad try karo.",
+        "auth/network-request-failed": "Internet connection check karo.",
+        "auth/operation-not-allowed": "Firebase mein Email/Password sign-in enable karo.",
+        "auth/invalid-api-key": "Firebase API key check karo."
+    };
 
-showMessage( messages[error.code] || Login failed: ${error.code || error.message}, true );
+    showMessage(
+        messages[error.code] ||
+        `Login failed: ${error.code || error.message}`,
+        true
+    );
 
-} finally { loginButton.disabled = false; } }); } else { console.error("HTML mein loginForm nahi mila."); }
-
+} finally {
+    loginButton.disabled = false;
+}
 // ======================================== // AUTHENTICATION STATE // ========================================
 
 onAuthStateChanged(auth, (user) => { if (user) { if (authSection) authSection.hidden = true; if (dashboard) dashboard.hidden = false;
@@ -100,7 +120,13 @@ if (powerButton) { powerButton.setAttribute("aria-pressed", String(lightIsOn)); 
 
 function renderHistory() { if (!activityList) return;
 
-if (history.length === 0) { activityList.innerHTML = <div class="empty-state"> <span>◷</span> <p>No activity yet.</p> </div> ; return; }
+if (history.length === 0) 
+    activityList.innerHTML = `
+    <div class="empty-state">
+        <span>◷</span>
+        <p>No activity yet.</p>
+    </div>
+`; return; }
 
 activityList.innerHTML = history.map(item => <div class="activity-item"> <div> <strong>${item.on ? "💡 Light turned ON" : "🌙 Light turned OFF"}</strong> <small>${item.time}</small> </div> <span class="activity-result ${item.on ? "on" : "off"}"> ${item.on ? "ON" : "OFF"} </span> </div> ).join(""); }
 
