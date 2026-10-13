@@ -1,0 +1,195 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color" content="#080d19"> <meta name="description" content="SmartFix Remote Light Control Dashboard">
+
+<title>SmartFix | Remote Light Control</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css"> </head>
+
+<body>
+
+    HTML
+<!-- SMARTFIX LOGIN INTERFACE -->
+
+<div id="authSection" class="auth-section">
+
+    <div class="auth-card">
+
+        <div class="auth-logo">S</div>
+
+        <h1>SmartFix Control</h1>
+
+        <p class="auth-subtitle">
+            Secure Smart Device Management
+        </p>
+
+        <form id="loginForm">
+
+            <h2>Welcome Back</h2>
+
+            <p class="auth-description">
+                Login to access your control panel.
+            </p>
+
+            <label for="loginEmail">
+                Email Address
+            </label>
+
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="Enter your email"
+                autocomplete="username"
+                required
+            >
+
+            <label for="loginPassword">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button type="submit" id="loginButton">
+                Login
+            </button>
+
+            <p class="auth-description">
+                Need access? Contact your administrator.
+            </p>
+
+        </form>
+
+        <p
+            id="authMessage"
+            role="status"
+            aria-live="polite"
+        ></p>
+
+    </div>
+
+</div>
+
+
+<header class="topbar"> <a href="#" class="brand"> <span class="brand-icon">S</span> <span class="brand-text"> <strong>SmartFix</strong> <small>SMART HOME CONTROL</small> </span> </a>
+
+<div class="connection-status"> <span class="status-dot"></span> <span id="connectionText">Demo Mode</span> </div> </header>
+
+<main class="dashboard" id="dashboardSection" hidden>
+
+
+<section class="welcome"> <div class="welcome-content"> <span class="eyebrow">SMART HOME DASHBOARD</span>
+
+<h1> Control your<br> <span>home lighting.</span> </h1>
+
+<p> Manage your lights from your browser. Simple, convenient and designed for every screen. </p> </div>
+
+<div class="welcome-card"> <div class="welcome-card-icon">⌂</div> <div> <small>YOUR SPACE</small> <strong>My Home</strong> <span>1 device configured</span> </div> </div> </section>
+
+<section class="summary-grid">
+
+<article class="summary-card"> <div class="summary-icon blue-icon">⌂</div> <div class="summary-info"> <span>Registered Devices</span> <strong>01</strong> </div> <span class="summary-indicator">DEVICE</span> </article>
+
+<article class="summary-card"> <div class="summary-icon amber-icon">☀</div> <div class="summary-info"> <span>Light Status</span> <strong id="overviewStatus">OFF</strong> </div> <span class="summary-indicator" id="overviewIndicator">STANDBY</span> </article>
+
+</section>
+
+<section class="control-section">
+
+<div class="section-heading"> <div> <span class="eyebrow">YOUR DEVICES</span> <h2>Device control</h2> </div>
+
+<span class="device-count">01 DEVICE</span> </div>
+
+<div class="control-layout">
+
+<article class="device-card">
+
+<div class="device-header"> <div class="device-title"> <div class="device-icon">💡</div> <div> <h3>Living Room Light</h3> <p>Smart light controller</p> </div> </div>
+
+<span class="device-badge" id="deviceBadge"> <span class="badge-dot"></span> OFF </span> </div>
+
+<div class="light-visual" id="lightVisual">
+
+<div class="light-orb"></div>
+
+<div class="bulb-icon" id="bulbIcon"> 💡 </div>
+
+<span class="visual-status" id="visualStatus"> LIGHT IS OFF </span>
+
+<p id="visualDescription"> Your light is currently switched off. </p>
+
+</div>
+
+<div class="device-controls">
+
+<div class="control-description"> <strong>Power control</strong> <span>Turn your light on or off.</span> </div>
+
+<button type="button" class="power-button" id="powerButton" aria-pressed="false" > <span class="power-symbol">⏻</span> <span id="buttonText">TURN ON LIGHT</span> </button>
+
+</div>
+
+<div class="device-note"> <span>ⓘ</span> <p> Demo mode: this button changes the website interface only. It does not control a physical light until the ESP32 and backend are connected. </p> </div>
+
+</article>
+
+<aside class="side-panel">
+
+<article class="info-card"> <span class="panel-label">DEVICE INFORMATION</span>
+
+<div class="info-row"> <span>Device name</span> <strong>Living Room Light</strong> </div>
+
+<div class="info-row"> <span>Controller</span> <strong>ESP32</strong> </div>
+
+<div class="info-row"> <span>Connection</span> <strong class="demo-text">Not connected</strong> </div>
+
+<div class="info-row"> <span>Operating mode</span> <strong>Browser demo</strong> </div> </article>
+
+<article class="quick-card"> <div class="quick-card-icon">⌘</div>
+
+<h3>Remote access</h3>
+
+<p> The interface is ready for future integration with Firebase and your ESP32 controller. </p>
+
+<span class="coming-soon">HARDWARE INTEGRATION PENDING</span> </article>
+
+</aside>
+
+</div>
+
+</section>
+
+<section class="activity-section">
+
+<div class="section-heading"> <div> <span class="eyebrow">RECENT EVENTS</span> <h2>Activity history</h2> </div>
+
+<button type="button" class="clear-button" id="clearHistory"> Clear history </button> </div>
+
+<div class="activity-card" id="activityList" aria-live="polite"> <div class="empty-state"> <span>◷</span> <p>No activity yet. Your device actions will appear here.</p> </div> </div>
+
+</section>
+
+<footer class="footer"> <div class="footer-brand"> <span class="footer-logo">S</span> <strong>SmartFix</strong> </div>
+
+<p>Smart Home Control Dashboard</p>
+
+<small> Browser-based interface · Hardware integration pending </small>
+
+<small class="copyright"> © <span id="currentYear">2026</span> SmartFix. All rights reserved. </small> </footer>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="script.js"></script>
+
+
+</body> </html>
