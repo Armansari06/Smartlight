@@ -10,6 +10,7 @@ import {
     onValue
 } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
 
+
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 
 // ======================================== // FIREBASE CONFIGURATION // ========================================
@@ -17,6 +18,8 @@ import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from
 const firebaseConfig = { apiKey: "AIzaSyCMmOj1XKiK5uV1SVWDjlQXpGlYZhJAIVo", authDomain: "smartfix-smart-control.firebaseapp.com", projectId: "smartfix-smart-control", storageBucket: "smartfix-smart-control.firebasestorage.app", messagingSenderId: "290143591521", appId: "1:290143591521:web:c36fc993040087ef36de20" };
 
 const app = initializeApp(firebaseConfig); const auth = getAuth(app);
+
+
 
 // ========================================
 // FIREBASE REALTIME DATABASE
