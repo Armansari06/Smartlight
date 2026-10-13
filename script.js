@@ -124,6 +124,66 @@ if (dashboard) { dashboard.hidden = false; }
 if (connectionText) { connectionText.textContent = "Demo Mode"; }
 
 console.log( "SmartFix logged in:", user.email );
+console.log("Logged-in User UID:", user.uid);
+Ab tumhara code is tarah dikhega:
+
+onAuthStateChanged(
+    auth,
+    (user) => {
+        if (user) {
+            // User logged in.
+
+            if (authSection) {
+                authSection.hidden = true;
+            }
+
+            if (dashboard) {
+                dashboard.hidden = false;
+            }
+
+            if (connectionText) {
+                connectionText.textContent = "Demo Mode";
+            }
+
+            console.log(
+                "SmartFix logged in:",
+                user.email
+            );
+
+            // NEW LINE
+            console.log(
+                "Logged-in User UID:",
+                user.uid
+            );
+
+            createLogoutButton();
+
+        } else {
+            // User logged out.
+
+            if (authSection) {
+                authSection.hidden = false;
+            }
+
+            if (dashboard) {
+                dashboard.hidden = true;
+            }
+
+            console.log("SmartFix: No user logged in.");
+        }
+    },
+    (error) => {
+        console.error(
+            "Authentication state error:",
+            error
+        );
+
+        showMessage(
+            "Authentication check failed. refresh the page & try again.",
+            true
+        );
+    }
+);
 
 createLogoutButton();
 
