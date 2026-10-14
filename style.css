@@ -776,3 +776,4 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 @media (max-width: 480px) { .developer-credit { width: calc(100% - 30px); padding: 18px 0 22px; }
 
 .developer-credit p { font-size: 10px; } }
+
