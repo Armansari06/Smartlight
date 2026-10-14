@@ -758,3 +758,21 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 .control-layout > .device-card > .device-header { min-height: 80px; }
 
 .control-layout > .device-card > .light-visual, .control-layout > .device-card > .device-visual { min-height: 110px; } }
+
+/* Prevent login page flash during refresh */
+
+#authSection[hidden],
+#dashboardSection[hidden] {
+    display: none !important;
+}
+/* DEVELOPER CREDIT */
+
+.developer-credit { width: min(1160px, calc(100% - 48px)); margin: 0 auto; padding: 22px 0 25px; border-top: 1px solid rgba(148, 163, 184, 0.15); text-align: center; }
+
+.developer-credit p { color: #94a3b8; font-size: 11px; line-height: 1.8; letter-spacing: 0.3px; }
+
+.developer-credit span { color: #38bdf8; font-weight: 700; }
+
+@media (max-width: 480px) { .developer-credit { width: calc(100% - 30px); padding: 18px 0 22px; }
+
+.developer-credit p { font-size: 10px; } }
