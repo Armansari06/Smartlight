@@ -735,21 +735,23 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 [hidden] {
     display: none !important;
 }
-/* MOBILE ONLY: Align device buttons without affecting desktop */
+/* MOBILE FIX: Align buttons despite different card content */
 
 @media screen and (max-width: 650px) {
 
-.control-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+.control-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 12px; }
 
 .control-layout > .device-card { display: flex; flex-direction: column; min-width: 0; }
 
-.control-layout > .device-card > .device-header { min-height: 85px; }
+/* Keep all device headers consistent */ .control-layout > .device-card > .device-header { min-height: 85px; }
 
-.control-layout > .device-card > .light-visual, .control-layout > .device-card > .device-visual { min-height: 125px; margin-top: 12px; margin-bottom: 12px; }
+/* Keep device visuals consistent */ .control-layout > .device-card > .light-visual, .control-layout > .device-card > .device-visual { min-height: 125px; margin-top: 12px; margin-bottom: 12px; }
 
-.control-layout > .device-card > .device-controls { margin-top: auto; }
+/* Align control buttons */ .control-layout > .device-card > .device-controls { margin-top: auto; }
 
-.control-layout > .side-panel { grid-column: 1 / -1; } }
+/* Keep the door warning below its button */ .control-layout > .device-card > .device-note { margin-top: 10px; }
+
+/* Information panels occupy full width */ .control-layout > .side-panel { grid-column: 1 / -1; } }
 
 @media screen and (max-width: 380px) {
 
