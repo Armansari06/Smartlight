@@ -50,7 +50,7 @@ toastTimer = setTimeout(() => { toast.classList.remove("show"); }, 3000); }
 
 // ======================================== // HTML ESCAPING // ========================================
 
-function escapeHTML(value) { return String(value).replace(/[&<>"']/g, character => ({ "&": "&", "<": "<", ">": ">", '"': """, "'": "'" })[character]); }
+function escapeHTML(value) { const text = String(value); return text .replace(/&/g, "&") .replace(/</g, "<") .replace(/>/g, ">") .replace(/"/g, """) .replace(/'/g, "'"); }
 
 // ======================================== // CLEANUP // ========================================
 
