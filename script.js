@@ -165,27 +165,38 @@ return ` <div class="activity-item"> <div> <strong>
 
 <span class="activity-result ${isOn ? "on" : "off"}"> ${isDoor ? (isOn ? "UNLOCKED" : "LOCKED") : (isOn ? "ON" : "OFF")} </span> </div> `; }).join(""); }
 
-// ======================================== // LOAD CUSTOMER HOME // ========================================
+// ========================================
+// LOAD CUSTOMER HOME
+// ========================================
 
 async function loadCustomerHome(user) {
     cleanupListeners();
 
     const assignmentRef = ref(database, `userHomes/${user.uid}`);
-}
-console.log("Logged-in UID:", user.uid); console.log("Assignment path:", assignmentRef.toString());
 
-let assignmentSnapshot;
+    console.log("Logged-in UID:", user.uid);
+    console.log("Assignment path:", assignmentRef.toString());
 
-try {
-    assignmentSnapshot = await get(assignmentRef);
-} catch (error) {
-    console.error("Assignment error:", error.code, error.message);
+    let assignmentSnapshot;
 
-    throw new Error(
-        error.code === "PERMISSION_DENIED"
-            ? "Database permission denied. Firebase Rules check karo."
-            : "Customer assignment load nahi hua."
-    );
+    try {
+        assignmentSnapshot = await get(assignmentRef);
+    } catch (error) {
+        console.error("Assignment error:", error.code, error.message);
+
+        throw new Error(
+            error.code === "PERMISSION_DENIED"
+                ? "Database permission denied. Firebase Rules check karo."
+                : "Customer assignment load nahi hua."
+        );
+    }
+
+    // Assignment data yahan available hoga
+    const assignmentData = assignmentSnapshot.val();
+
+    console.log("Assignment data:", assignmentData);
+
+    // Apna baaki customer home wala code yahan likho
 }
 
 throw new Error( error.code === "PERMISSION_DENIED" ? "Database permission denied. Firebase Rules check karo." : "Customer assignment load nahi hua." ); }
