@@ -925,34 +925,22 @@ showToast(
     `${devices[deviceId].name}: ${statusText}`
 );
 
-                const statusText =
-                    deviceId === "mainDoor"
-                        ? (nextState ? "UNLOCKED" : "LOCKED")
-                        : (nextState ? "ON" : "OFF");
+} catch (error) {
+    console.error(
+        "Device update error:",
+        error.code,
+        error.message
+    );
 
-                showToast(
-                    `${devices[deviceId].name}: ${statusText}`
-                );
+    showToast(
+        error.code === "PERMISSION_DENIED"
+            ? "Permission denied. Firebase Rules check karo."
+            : "Device update nahi hua."
+    );
 
-            } catch (error) {
-                console.error(
-                    "Device update error:",
-                    error.code,
-                    error.message
-                );
-
-                showToast(
-                    error.code === "PERMISSION_DENIED"
-                        ? "Permission denied. Firebase Rules check karo."
-                        : "Device update nahi hua."
-                );
-
-            } finally {
-                button.disabled = false;
-            }
-        });
-    });
-
+} finally {
+    button.disabled = false;
+}
 
 // ========================================
 // CLEAR HISTORY
