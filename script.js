@@ -167,10 +167,11 @@ return ` <div class="activity-item"> <div> <strong>
 
 // ======================================== // LOAD CUSTOMER HOME // ========================================
 
-async function loadCustomerHome(user) { cleanupListeners();
+async function loadCustomerHome(user) {
+    cleanupListeners();
 
-const assignmentRef = ref(database, userHomes/${user.uid});
-
+    const assignmentRef = ref(database, `userHomes/${user.uid}`);
+}
 console.log("Logged-in UID:", user.uid); console.log("Assignment path:", assignmentRef.toString());
 
 let assignmentSnapshot;
