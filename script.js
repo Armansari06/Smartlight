@@ -107,7 +107,10 @@ for (const [elementId, text] of Object.entries(extraDescriptions)) { const eleme
 
 function renderHistory(items) { if (!activityList) return;
 
-if (items.length === 0) { activityList.innerHTML = <div class="empty-state"> <span>◷</span> <p>No activity yet.</p> </div> ; return; }
+if (items.length === 0) { activityList.innerHTML = `<div class="empty-state">
+    <span>◷</span>
+    <p>No activity yet.</p>
+</div>`;
 
 activityList.innerHTML = items.map(item => { const isOn = item.state === true; const deviceName = escapeHTML(item.name || "Device"); const timestamp = Number(item.timestamp);
 
