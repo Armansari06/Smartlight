@@ -176,7 +176,17 @@ console.log("Logged-in UID:", user.uid); console.log("Assignment path:", assignm
 
 let assignmentSnapshot;
 
-try { assignmentSnapshot = await get(assignmentRef); } catch (error) { console.error("Assignment error:", error.code, error.message);
+try {
+    assignmentSnapshot = await get(assignmentRef);
+} catch (error) {
+    console.error("Assignment error:", error.code, error.message);
+
+    throw new Error(
+        error.code === "PERMISSION_DENIED"
+            ? "Database permission denied. Firebase Rules check karo."
+            : "Customer assignment load nahi hua."
+    );
+}
 
 throw new Error( error.code === "PERMISSION_DENIED" ? "Database permission denied. Firebase Rules check karo." : "Customer assignment load nahi hua." ); }
 
