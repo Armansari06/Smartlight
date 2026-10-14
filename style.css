@@ -735,14 +735,16 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 [hidden] {
     display: none !important;
 }
-body:not(.logged-in) #dashboardSection {
-    display: none !important;
-}
+/* ======================================== SMARTFIX LOGIN / DASHBOARD VISIBILITY ======================================== */
 
-body.logged-in #authSection {
-    display: none !important;
-}
+[hidden] { display: none !important; }
 
-body.logged-in #dashboardSection {
-    display: block !important;
-}
+#authSection, #dashboardSection { display: block; }
+
+#authSection[hidden], #dashboardSection[hidden] { display: none !important; }
+
+body:not(.logged-in) #dashboardSection { display: none !important; }
+
+body.logged-in #authSection { display: none !important; }
+
+body.logged-in #dashboardSection:not([hidden]) { display: block; }
