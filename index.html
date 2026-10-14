@@ -1,8 +1,8 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html> <html lang="en">
 
-<meta name="theme-color" content="#080d19"> <meta name="description" content="SmartFix Remote Light Control Dashboard">
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <meta name="theme-color" content="#080d19"> <meta name="description" content="SmartFix Smart Home Control Dashboard">
 
-<title>SmartFix | Remote Light Control</title>
+<title>SmartFix | Smart Home Control</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -12,154 +12,285 @@
 
 <body>
 
-    HTML
-<!-- SMARTFIX LOGIN INTERFACE -->
+<!-- LOGIN SECTION --> <div id="authSection" class="auth-section">
 
-<div id="authSection" class="auth-section">
+<div class="auth-card">
 
-    <div class="auth-card">
+<div class="auth-logo">S</div>
 
-        <div class="auth-logo">S</div>
+<h1>SmartFix Control</h1>
 
-        <h1>SmartFix Control</h1>
+<p class="auth-subtitle"> Secure Smart Device Management </p>
 
-        <p class="auth-subtitle">
-            Secure Smart Device Management
-        </p>
+<form id="loginForm">
 
-        <form id="loginForm">
+<h2>Welcome Back</h2>
 
-            <h2>Welcome Back</h2>
+<p class="auth-description"> Login to access your control panel. </p>
 
-            <p class="auth-description">
-                Login to access your control panel.
-            </p>
+<label for="loginEmail">Email Address</label>
 
-            <label for="loginEmail">
-                Email Address
-            </label>
+<input type="email" id="loginEmail" placeholder="Enter your email" autocomplete="username" required >
 
-            <input
-                type="email"
-                id="loginEmail"
-                placeholder="Enter your email"
-                autocomplete="username"
-                required
-            >
+<label for="loginPassword">Password</label>
 
-            <label for="loginPassword">
-                Password
-            </label>
+<input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required >
 
-            <input
-                type="password"
-                id="loginPassword"
-                placeholder="Enter your password"
-                autocomplete="current-password"
-                required
-            >
+<button type="submit" id="loginButton"> Login </button>
 
-            <button type="submit" id="loginButton">
-                Login
-            </button>
+<p class="auth-description"> Need access? Contact your administrator. </p>
 
-            <p class="auth-description">
-                Need access? Contact your administrator.
-            </p>
+</form>
 
-        </form>
+<p id="authMessage" role="status" aria-live="polite"></p>
 
-        <p
-            id="authMessage"
-            role="status"
-            aria-live="polite"
-        ></p>
+</div> </div>
 
-    </div>
+<!-- HEADER --> <header class="topbar">
+
+<a href="#" class="brand"> <span class="brand-icon">S</span>
+
+<span class="brand-text"> <strong>SmartFix</strong> <small>SMART HOME CONTROL</small> </span> </a>
+
+<div class="connection-status"> <span class="status-dot"></span> <span id="connectionText">Login Required</span> </div>
+
+</header>
+
+<!-- DASHBOARD --> <main class="dashboard" id="dashboardSection" hidden>
+
+<!-- WELCOME --> <section class="welcome">
+
+<div class="welcome-content">
+
+<span class="eyebrow">SMART HOME DASHBOARD</span>
+
+<h1> Control your<br> <span>smart home.</span> </h1>
+
+<p> Control your lights, fan and door from one dashboard. Your devices are organized for convenient access. </p>
 
 </div>
 
+<div class="welcome-card">
 
-<header class="topbar"> <a href="#" class="brand"> <span class="brand-icon">S</span> <span class="brand-text"> <strong>SmartFix</strong> <small>SMART HOME CONTROL</small> </span> </a>
+<div class="welcome-card-icon">⌂</div>
 
-<div class="connection-status"> <span class="status-dot"></span> <span id="connectionText">Demo Mode</span> </div> </header>
+<div> <small>YOUR SPACE</small> <strong>My Home</strong> <span>4 devices configured</span> </div>
 
-<main class="dashboard" id="dashboardSection" hidden>
-
-
-<section class="welcome"> <div class="welcome-content"> <span class="eyebrow">SMART HOME DASHBOARD</span>
-
-<h1> Control your<br> <span>home lighting.</span> </h1>
-
-<p> Manage your lights from your browser. Simple, convenient and designed for every screen. </p> </div>
-
-<div class="welcome-card"> <div class="welcome-card-icon">⌂</div> <div> <small>YOUR SPACE</small> <strong>My Home</strong> <span>1 device configured</span> </div> </div> </section>
-
-<section class="summary-grid">
-
-<article class="summary-card"> <div class="summary-icon blue-icon">⌂</div> <div class="summary-info"> <span>Registered Devices</span> <strong>01</strong> </div> <span class="summary-indicator">DEVICE</span> </article>
-
-<article class="summary-card"> <div class="summary-icon amber-icon">☀</div> <div class="summary-info"> <span>Light Status</span> <strong id="overviewStatus">OFF</strong> </div> <span class="summary-indicator" id="overviewIndicator">STANDBY</span> </article>
+</div>
 
 </section>
 
-<section class="control-section">
+<!-- SUMMARY --> <section class="summary-grid">
 
-<div class="section-heading"> <div> <span class="eyebrow">YOUR DEVICES</span> <h2>Device control</h2> </div>
+<article class="summary-card">
 
-<span class="device-count">01 DEVICE</span> </div>
+<div class="summary-icon blue-icon">⌂</div>
+
+<div class="summary-info"> <span>Registered Devices</span> <strong>04</strong> </div>
+
+<span class="summary-indicator">DEVICES</span>
+
+</article>
+
+<article class="summary-card">
+
+<div class="summary-icon amber-icon">☀</div>
+
+<div class="summary-info"> <span>Living Room Light</span> <strong id="overviewStatus">OFF</strong> </div>
+
+<span class="summary-indicator" id="overviewIndicator"> STANDBY </span>
+
+</article>
+
+</section>
+
+<!-- DEVICE CONTROLS --> <section class="control-section">
+
+<div class="section-heading">
+
+<div> <span class="eyebrow">YOUR DEVICES</span> <h2>Device Control</h2> </div>
+
+<span class="device-count">04 DEVICES</span>
+
+</div>
 
 <div class="control-layout">
 
-<article class="device-card">
+<!-- LIVING ROOM LIGHT --> <article class="device-card">
 
-<div class="device-header"> <div class="device-title"> <div class="device-icon">💡</div> <div> <h3>Living Room Light</h3> <p>Smart light controller</p> </div> </div>
+<div class="device-header">
 
-<span class="device-badge" id="deviceBadge"> <span class="badge-dot"></span> OFF </span> </div>
+<div class="device-title">
+
+<div class="device-icon">💡</div>
+
+<div> <h3>Living Room Light</h3> <p>Main living room lighting</p> </div>
+
+</div>
+
+<span class="device-badge" id="livingRoomLightBadge"> OFF </span>
+
+</div>
 
 <div class="light-visual" id="lightVisual">
 
 <div class="light-orb"></div>
 
-<div class="bulb-icon" id="bulbIcon"> 💡 </div>
+<div class="bulb-icon">💡</div>
 
 <span class="visual-status" id="visualStatus"> LIGHT IS OFF </span>
 
-<p id="visualDescription"> Your light is currently switched off. </p>
+<p id="visualDescription"> Your living room light is switched off. </p>
 
 </div>
 
 <div class="device-controls">
 
-<div class="control-description"> <strong>Power control</strong> <span>Turn your light on or off.</span> </div>
+<div class="control-description"> <strong>Light Control</strong> <span>Turn the living room light on or off.</span> </div>
 
-<button type="button" class="power-button" id="powerButton" aria-pressed="false" > <span class="power-symbol">⏻</span> <span id="buttonText">TURN ON LIGHT</span> </button>
+<button type="button" class="power-button" data-device="livingRoomLight" aria-pressed="false" > <span class="power-symbol">⏻</span> <span class="device-button-text">TURN ON</span> </button>
 
 </div>
 
-<div class="device-note"> <span>ⓘ</span> <p> Demo mode: this button changes the website interface only. It does not control a physical light until the ESP32 and backend are connected. </p> </div>
+</article>
+
+<!-- FAN --> <article class="device-card">
+
+<div class="device-header">
+
+<div class="device-title">
+
+<div class="device-icon">🌀</div>
+
+<div> <h3>Fan</h3> <p>Fan power control</p> </div>
+
+</div>
+
+<span class="device-badge" id="fanBadge"> OFF </span>
+
+</div>
+
+<div class="device-visual">
+
+<div class="bulb-icon">🌀</div>
+
+<span class="visual-status" id="fanVisualStatus"> FAN IS OFF </span>
+
+<p id="fanVisualDescription"> Your fan is switched off. </p>
+
+</div>
+
+<div class="device-controls">
+
+<div class="control-description"> <strong>Fan Control</strong> <span>Turn the fan on or off.</span> </div>
+
+<button type="button" class="power-button" data-device="fan" aria-pressed="false" > <span class="power-symbol">⏻</span> <span class="device-button-text">TURN ON</span> </button>
+
+</div>
 
 </article>
 
-<aside class="side-panel">
+<!-- BEDROOM LIGHT --> <article class="device-card">
 
-<article class="info-card"> <span class="panel-label">DEVICE INFORMATION</span>
+<div class="device-header">
 
-<div class="info-row"> <span>Device name</span> <strong>Living Room Light</strong> </div>
+<div class="device-title">
+
+<div class="device-icon">💡</div>
+
+<div> <h3>Bedroom Light</h3> <p>Bedroom lighting</p> </div>
+
+</div>
+
+<span class="device-badge" id="bedroomLightBadge"> OFF </span>
+
+</div>
+
+<div class="device-visual">
+
+<div class="bulb-icon">💡</div>
+
+<span class="visual-status" id="bedroomVisualStatus"> LIGHT IS OFF </span>
+
+<p id="bedroomVisualDescription"> Your bedroom light is switched off. </p>
+
+</div>
+
+<div class="device-controls">
+
+<div class="control-description"> <strong>Bedroom Light Control</strong> <span>Turn the bedroom light on or off.</span> </div>
+
+<button type="button" class="power-button" data-device="bedroomLight" aria-pressed="false" > <span class="power-symbol">⏻</span> <span class="device-button-text">TURN ON</span> </button>
+
+</div>
+
+</article>
+
+<!-- MAIN DOOR --> <article class="device-card">
+
+<div class="device-header">
+
+<div class="device-title">
+
+<div class="device-icon">🚪</div>
+
+<div> <h3>Main Door</h3> <p>Door lock status control</p> </div>
+
+</div>
+
+<span class="device-badge" id="mainDoorBadge"> LOCKED </span>
+
+</div>
+
+<div class="device-visual">
+
+<div class="bulb-icon">🔒</div>
+
+<span class="visual-status" id="doorVisualStatus"> DOOR IS LOCKED </span>
+
+<p id="doorVisualDescription"> The simulated door status is locked. </p>
+
+</div>
+
+<div class="device-controls">
+
+<div class="control-description"> <strong>Door Control</strong> <span>Change the simulated door status.</span> </div>
+
+<button type="button" class="power-button" data-device="mainDoor" aria-pressed="false" > <span class="power-symbol">🔒</span> <span class="device-button-text">UNLOCK</span> </button>
+
+</div>
+
+<div class="device-note"> <span>ⓘ</span> <p> Door control is a status simulation until a compatible lock controller and safety features are installed. </p> </div>
+
+</article>
+
+<!-- DEVICE INFORMATION --> <aside class="side-panel">
+
+<article class="info-card">
+
+<span class="panel-label">DEVICE INFORMATION</span>
+
+<div class="info-row"> <span>Home</span> <strong id="homeNameDisplay">My Home</strong> </div>
+
+<div class="info-row"> <span>Registered devices</span> <strong>4</strong> </div>
 
 <div class="info-row"> <span>Controller</span> <strong>ESP32</strong> </div>
 
-<div class="info-row"> <span>Connection</span> <strong class="demo-text">Not connected</strong> </div>
+<div class="info-row"> <span>Hardware connection</span> <strong class="demo-text">Pending</strong> </div>
 
-<div class="info-row"> <span>Operating mode</span> <strong>Browser demo</strong> </div> </article>
+</article>
 
-<article class="quick-card"> <div class="quick-card-icon">⌘</div>
+<article class="quick-card">
 
-<h3>Remote access</h3>
+<div class="quick-card-icon">⌘</div>
 
-<p> The interface is ready for future integration with Firebase and your ESP32 controller. </p>
+<h3>Remote Access</h3>
 
-<span class="coming-soon">HARDWARE INTEGRATION PENDING</span> </article>
+<p> Your dashboard uses Firebase to store device states. Physical device control requires ESP32 hardware integration. </p>
+
+<span class="coming-soon"> HARDWARE INTEGRATION PENDING </span>
+
+</article>
 
 </aside>
 
@@ -167,29 +298,40 @@
 
 </section>
 
-<section class="activity-section">
+<!-- ACTIVITY HISTORY --> <section class="activity-section">
 
-<div class="section-heading"> <div> <span class="eyebrow">RECENT EVENTS</span> <h2>Activity history</h2> </div>
+<div class="section-heading">
 
-<button type="button" class="clear-button" id="clearHistory"> Clear history </button> </div>
+<div> <span class="eyebrow">RECENT EVENTS</span> <h2>Activity History</h2> </div>
 
-<div class="activity-card" id="activityList" aria-live="polite"> <div class="empty-state"> <span>◷</span> <p>No activity yet. Your device actions will appear here.</p> </div> </div>
+<button type="button" class="clear-button" id="clearHistory" > Clear History </button>
+
+</div>
+
+<div class="activity-card" id="activityList" aria-live="polite">
+
+<div class="empty-state"> <span>◷</span> <p>No activity yet.</p> </div>
+
+</div>
 
 </section>
 
-<footer class="footer"> <div class="footer-brand"> <span class="footer-logo">S</span> <strong>SmartFix</strong> </div>
+<!-- FOOTER --> <footer class="footer">
+
+<div class="footer-brand"> <span class="footer-logo">S</span> <strong>SmartFix</strong> </div>
 
 <p>Smart Home Control Dashboard</p>
 
-<small> Browser-based interface · Hardware integration pending </small>
+<small> Browser interface · Hardware integration pending </small>
 
-<small class="copyright"> © <span id="currentYear">2026</span> SmartFix. All rights reserved. </small> </footer>
+<small class="copyright"> © <span id="currentYear">2026</span> SmartFix. All rights reserved. </small>
+
+</footer>
 
 </main>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<!-- NOTIFICATION --> <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="script.js"></script>
-
+<!-- JAVASCRIPT --> <script type="module" src="script.js"></script>
 
 </body> </html>
