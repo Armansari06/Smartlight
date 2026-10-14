@@ -69,7 +69,7 @@ const badge = document.getElementById(device.badge);
 
 if (badge) { badge.textContent = isOn ? device.onLabel : device.offLabel; }
 
-document.querySelectorAll([data-device="${deviceId}"]) .forEach(button => { button.setAttribute("aria-pressed", String(isOn)); button.classList.toggle("is-on", isOn);
+document.querySelectorAll(`[data-device="${deviceId}"]`) .forEach(button => { button.setAttribute("aria-pressed", String(isOn)); button.classList.toggle("is-on", isOn);
 
 const label = button.querySelector(".device-button-text");
 
