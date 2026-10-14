@@ -120,7 +120,7 @@ const isDoor = item.device === "mainDoor";
 
 let actionText;
 
-if (isDoor) { actionText = isOn ? "Door unlocked" : "Door locked"; } else { actionText = ${deviceName} turned ${isOn ? "ON" : "OFF"}; }
+if (isDoor) { actionText = isOn ? "Door unlocked" : "Door locked"; } else { actionText = `${deviceName} turned ${isOn ? "ON" : "OFF"}`; }
 
 return ` <div class="activity-item"> <div> <strong>
 𝑒
