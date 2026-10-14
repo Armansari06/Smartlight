@@ -941,6 +941,8 @@ showToast(
 } finally {
     button.disabled = false;
 }
+    });
+    });
 
 // ========================================
 // CLEAR HISTORY
