@@ -1,48 +1,154 @@
 "use strict";
 
+// ========================================
+// FIREBASE IMPORTS
+// ========================================
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
 
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 
-import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
+import {
+    getDatabase,
+    ref,
+    get,
+    set,
+    onValue
+} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
 
-// ======================================== // FIREBASE CONFIGURATION // ========================================
 
-const firebaseConfig = { apiKey: "AIzaSyCMmOj1XKiK5uV1SVWDjlQXpGlYZhJAIVo", authDomain: "smartfix-smart-control.firebaseapp.com", projectId: "smartfix-smart-control", storageBucket: "smartfix-smart-control.firebasestorage.app", messagingSenderId: "290143591521", appId: "1:290143591521:web:c36fc993040087ef36de20", databaseURL: "https://smartfix-smart-control-default-rtdb.asia-southeast1.firebasedatabase.app" };
+// ========================================
+// FIREBASE CONFIGURATION
+// ========================================
 
-const app = initializeApp(firebaseConfig); const auth = getAuth(app); const database = getDatabase(app);
+const firebaseConfig = {
+    apiKey: "AIzaSyCMmOj1XKiK5uV1SVWDjlQXpGlYZhJAIVo",
+    authDomain: "smartfix-smart-control.firebaseapp.com",
+    projectId: "smartfix-smart-control",
+    storageBucket: "smartfix-smart-control.firebasestorage.app",
+    messagingSenderId: "290143591521",
+    appId: "1:290143591521:web:c36fc993040087ef36de20",
+    databaseURL: "https://smartfix-smart-control-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
 
-// ======================================== // HTML ELEMENTS // ========================================
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const database = getDatabase(app);
 
-const authSection = document.getElementById("authSection"); const dashboard = document.getElementById("dashboardSection");
 
-const loginForm = document.getElementById("loginForm"); const loginEmail = document.getElementById("loginEmail"); const loginPassword = document.getElementById("loginPassword"); const loginButton = document.getElementById("loginButton"); const authMessage = document.getElementById("authMessage");
+// ========================================
+// HTML ELEMENTS
+// ========================================
 
-const activityList = document.getElementById("activityList"); const clearHistory = document.getElementById("clearHistory"); const toast = document.getElementById("toast");
+const authSection = document.getElementById("authSection");
+const dashboard = document.getElementById("dashboardSection");
 
-let currentHomeId = null; let unsubscribeDevices = null; let unsubscribeHistory = null; let toastTimer = null; let authRequestNumber = 0;
+const loginForm = document.getElementById("loginForm");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+const loginButton = document.getElementById("loginButton");
+const authMessage = document.getElementById("authMessage");
 
-const deviceStates = { livingRoomLight: false, fan: false, bedroomLight: false, mainDoor: false };
+const activityList = document.getElementById("activityList");
+const clearHistory = document.getElementById("clearHistory");
+const toast = document.getElementById("toast");
 
-// ======================================== // DEVICE CONFIGURATION // ========================================
 
-const devices = { livingRoomLight: { name: "Living Room Light", badge: "livingRoomLightBadge", onLabel: "ON", offLabel: "OFF" }, fan: { name: "Fan", badge: "fanBadge", onLabel: "ON", offLabel: "OFF" }, bedroomLight: { name: "Bedroom Light", badge: "bedroomLightBadge", onLabel: "ON", offLabel: "OFF" }, mainDoor: { name: "Main Door", badge: "mainDoorBadge", onLabel: "UNLOCKED", offLabel: "LOCKED" } };
+// ========================================
+// GLOBAL VARIABLES
+// ========================================
 
-// ======================================== // MESSAGES // ========================================
+let currentHomeId = null;
 
-function showMessage(message, isError = false) { if (!authMessage) return;
+let unsubscribeDevices = null;
+let unsubscribeHistory = null;
 
-authMessage.textContent = message; authMessage.style.color = isError ? "#fb7185" : "#22c55e"; }
+let toastTimer = null;
+let authRequestNumber = 0;
 
-function showToast(message) { if (!toast) { console.log(message); return; }
+const deviceStates = {
+    livingRoomLight: false,
+    fan: false,
+    bedroomLight: false,
+    mainDoor: false
+};
 
-toast.textContent = message; toast.classList.add("show");
 
-clearTimeout(toastTimer);
+// ========================================
+// DEVICE CONFIGURATION
+// ========================================
 
-toastTimer = setTimeout(() => { toast.classList.remove("show"); }, 3000); }
+const devices = {
+    livingRoomLight: {
+        name: "Living Room Light",
+        badge: "livingRoomLightBadge",
+        onLabel: "ON",
+        offLabel: "OFF"
+    },
 
-// ======================================== // HTML ESCAPING // ========================================
+    fan: {
+        name: "Fan",
+        badge: "fanBadge",
+        onLabel: "ON",
+        offLabel: "OFF"
+    },
+
+    bedroomLight: {
+        name: "Bedroom Light",
+        badge: "bedroomLightBadge",
+        onLabel: "ON",
+        offLabel: "OFF"
+    },
+
+    mainDoor: {
+        name: "Main Door",
+        badge: "mainDoorBadge",
+        onLabel: "UNLOCKED",
+        offLabel: "LOCKED"
+    }
+};
+
+
+// ========================================
+// MESSAGES
+// ========================================
+
+function showMessage(message, isError = false) {
+    if (!authMessage) return;
+
+    authMessage.textContent = message;
+
+    authMessage.style.color = isError
+        ? "#fb7185"
+        : "#22c55e";
+}
+
+
+function showToast(message) {
+    if (!toast) {
+        console.log(message);
+        return;
+    }
+
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
+}
+
+
+// ========================================
+// HTML ESCAPING
+// ========================================
 
 function escapeHTML(value) {
     return String(value)
@@ -53,117 +159,230 @@ function escapeHTML(value) {
         .replace(/'/g, "&#039;");
 }
 
-// ======================================== // CLEANUP // ========================================
 
-function cleanupListeners() { if (unsubscribeDevices) unsubscribeDevices(); if (unsubscribeHistory) unsubscribeHistory();
+// ========================================
+// CLEANUP LISTENERS
+// ========================================
 
-unsubscribeDevices = null; unsubscribeHistory = null; currentHomeId = null;
+function cleanupListeners() {
+    if (unsubscribeDevices) {
+        unsubscribeDevices();
+    }
 
-Object.keys(deviceStates).forEach(deviceId => { deviceStates[deviceId] = false; }); }
+    if (unsubscribeHistory) {
+        unsubscribeHistory();
+    }
 
-// ======================================== // RENDER DEVICES // ========================================
+    unsubscribeDevices = null;
+    unsubscribeHistory = null;
 
-function renderDevices() { for (const [deviceId, device] of Object.entries(devices)) { const isOn = deviceStates[deviceId] === true;
+    currentHomeId = null;
 
-const badge = document.getElementById(device.badge);
+    Object.keys(deviceStates).forEach(deviceId => {
+        deviceStates[deviceId] = false;
+    });
 
-if (badge) { badge.textContent = isOn ? device.onLabel : device.offLabel; }
+    renderDevices();
+}
 
-document.querySelectorAll(`[data-device="${deviceId}"]`) .forEach(button => { button.setAttribute("aria-pressed", String(isOn)); button.classList.toggle("is-on", isOn);
 
-const label = button.querySelector(".device-button-text");
+// ========================================
+// RENDER DEVICES
+// ========================================
 
-if (label) { if (deviceId === "mainDoor") { label.textContent = isOn ? "LOCK DOOR" : "UNLOCK DOOR"; } else { label.textContent = isOn ? "TURN OFF" : "TURN ON"; } }
+function renderDevices() {
+    for (const [deviceId, device] of Object.entries(devices)) {
+        const isOn = deviceStates[deviceId] === true;
 
-const symbol = button.querySelector(".power-symbol");
+        const badge = document.getElementById(device.badge);
 
-if (symbol && deviceId === "mainDoor") { symbol.textContent = isOn ? "🔓" : "🔒"; } }); }
+        if (badge) {
+            badge.textContent = isOn
+                ? device.onLabel
+                : device.offLabel;
+        }
 
-const lightOn = deviceStates.livingRoomLight;
+        document
+            .querySelectorAll(`[data-device="${deviceId}"]`)
+            .forEach(button => {
+                button.setAttribute(
+                    "aria-pressed",
+                    String(isOn)
+                );
 
-const overviewStatus = document.getElementById("overviewStatus"); if (overviewStatus) { overviewStatus.textContent = lightOn ? "ON" : "OFF"; }
+                button.classList.toggle("is-on", isOn);
 
-const overviewIndicator = document.getElementById("overviewIndicator"); if (overviewIndicator) { overviewIndicator.textContent = lightOn ? "ACTIVE" : "STANDBY"; }
+                const label = button.querySelector(
+                    ".device-button-text"
+                );
 
-const lightVisual = document.getElementById("lightVisual"); if (lightVisual) { lightVisual.classList.toggle("is-on", lightOn); }
+                if (label) {
+                    if (deviceId === "mainDoor") {
+                        label.textContent = isOn
+                            ? "LOCK DOOR"
+                            : "UNLOCK DOOR";
+                    } else {
+                        label.textContent = isOn
+                            ? "TURN OFF"
+                            : "TURN ON";
+                    }
+                }
 
-const visualStatus = document.getElementById("visualStatus"); if (visualStatus) { visualStatus.textContent = lightOn ? "LIGHT IS ON" : "LIGHT IS OFF"; }
+                const symbol = button.querySelector(
+                    ".power-symbol"
+                );
 
-const visualDescription = document.getElementById("visualDescription"); if (visualDescription) { visualDescription.textContent = lightOn ? "Your living room light is switched on." : "Your living room light is switched off."; }
+                if (symbol && deviceId === "mainDoor") {
+                    symbol.textContent = isOn ? "🔓" : "🔒";
+                }
+            });
+    }
 
-const extraStatuses = { fanVisualStatus: deviceStates.fan ? "FAN IS ON" : "FAN IS OFF", bedroomVisualStatus: deviceStates.bedroomLight ? "LIGHT IS ON" : "LIGHT IS OFF", doorVisualStatus: deviceStates.mainDoor ? "DOOR IS UNLOCKED" : "DOOR IS LOCKED" };
+    const lightOn = deviceStates.livingRoomLight;
 
-for (const [elementId, text] of Object.entries(extraStatuses)) { const element = document.getElementById(elementId); if (element) element.textContent = text; }
+    const overviewStatus =
+        document.getElementById("overviewStatus");
 
-const extraDescriptions = { fanVisualDescription: deviceStates.fan ? "Your fan status is ON." : "Your fan status is OFF.",
+    if (overviewStatus) {
+        overviewStatus.textContent = lightOn ? "ON" : "OFF";
+    }
 
-bedroomVisualDescription: deviceStates.bedroomLight ? "Your bedroom light is switched on." : "Your bedroom light is switched off.",
+    const overviewIndicator =
+        document.getElementById("overviewIndicator");
 
-doorVisualDescription: deviceStates.mainDoor ? "The recorded door status is unlocked." : "The recorded door status is locked." };
+    if (overviewIndicator) {
+        overviewIndicator.textContent = lightOn
+            ? "ACTIVE"
+            : "STANDBY";
+    }
 
-for (const [elementId, text] of Object.entries(extraDescriptions)) { const element = document.getElementById(elementId); if (element) element.textContent = text; } }
+    const lightVisual =
+        document.getElementById("lightVisual");
 
-// ======================================== // ACTIVITY HISTORY // ========================================
+    if (lightVisual) {
+        lightVisual.classList.toggle("is-on", lightOn);
+    }
 
-function renderHistory(items) { if (!activityList) return;
+    const visualStatus =
+        document.getElementById("visualStatus");
 
-if (items.length === 0) { activityList.innerHTML = `<div class="empty-state">
-    <span>◷</span>
-    <p>No activity yet.</p>
-</div>`;
+    if (visualStatus) {
+        visualStatus.textContent = lightOn
+            ? "LIGHT IS ON"
+            : "LIGHT IS OFF";
+    }
 
-activityList.innerHTML = items.map(item => { const isOn = item.state === true; const deviceName = escapeHTML(item.name || "Device"); const timestamp = Number(item.timestamp);
+    const visualDescription =
+        document.getElementById("visualDescription");
 
-const time = Number.isFinite(timestamp) ? new Date(timestamp).toLocaleString() : "Unknown time";
+    if (visualDescription) {
+        visualDescription.textContent = lightOn
+            ? "Your living room light is switched on."
+            : "Your living room light is switched off.";
+    }
 
-const isDoor = item.device === "mainDoor";
+    const extraStatuses = {
+        fanVisualStatus: deviceStates.fan
+            ? "FAN IS ON"
+            : "FAN IS OFF",
 
-let actionText;
+        bedroomVisualStatus: deviceStates.bedroomLight
+            ? "LIGHT IS ON"
+            : "LIGHT IS OFF",
 
-if (isDoor) { actionText = isOn ? "Door unlocked" : "Door locked"; } else { actionText = `${deviceName} turned ${isOn ? "ON" : "OFF"}`; }
+        doorVisualStatus: deviceStates.mainDoor
+            ? "DOOR IS UNLOCKED"
+            : "DOOR IS LOCKED"
+    };
 
-return ` <div class="activity-item"> <div> <strong>
-𝑒
-𝑠
-𝑐
-𝑎
-𝑝
-𝑒
-𝐻
-𝑇
-𝑀
-𝐿
-(
-𝑎
-𝑐
-𝑡
-𝑖
-𝑜
-𝑛
-𝑇
-𝑒
-𝑥
-𝑡
-)
-<
-/
-𝑠
-𝑡
-𝑟
-𝑜
-𝑛
-𝑔
->
-<
-𝑠
-𝑚
-𝑎
-𝑙
-𝑙
->
-{escapeHTML(time)}</small> </div>
+    for (const [elementId, text] of Object.entries(extraStatuses)) {
+        const element = document.getElementById(elementId);
 
-<span class="activity-result ${isOn ? "on" : "off"}"> ${isDoor ? (isOn ? "UNLOCKED" : "LOCKED") : (isOn ? "ON" : "OFF")} </span> </div> `; }).join(""); }
+        if (element) {
+            element.textContent = text;
+        }
+    }
+
+    const extraDescriptions = {
+        fanVisualDescription: deviceStates.fan
+            ? "Your fan status is ON."
+            : "Your fan status is OFF.",
+
+        bedroomVisualDescription: deviceStates.bedroomLight
+            ? "Your bedroom light is switched on."
+            : "Your bedroom light is switched off.",
+
+        doorVisualDescription: deviceStates.mainDoor
+            ? "The recorded door status is unlocked."
+            : "The recorded door status is locked."
+    };
+
+    for (const [elementId, text] of Object.entries(extraDescriptions)) {
+        const element = document.getElementById(elementId);
+
+        if (element) {
+            element.textContent = text;
+        }
+    }
+}
+
+
+// ========================================
+// ACTIVITY HISTORY
+// ========================================
+
+function renderHistory(items) {
+    if (!activityList) return;
+
+    if (items.length === 0) {
+        activityList.innerHTML = `
+            <div class="empty-state">
+                <span>◷</span>
+                <p>No activity yet.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    activityList.innerHTML = items.map(item => {
+        const isOn = item.state === true;
+
+        const deviceName = escapeHTML(
+            item.name || "Device"
+        );
+
+        const timestamp = Number(item.timestamp);
+
+        const time = Number.isFinite(timestamp)
+            ? new Date(timestamp).toLocaleString()
+            : "Unknown time";
+
+        const isDoor = item.device === "mainDoor";
+
+        const actionText = isDoor
+            ? (isOn ? "Door unlocked" : "Door locked")
+            : `${deviceName} turned ${isOn ? "ON" : "OFF"}`;
+
+        const statusText = isDoor
+            ? (isOn ? "UNLOCKED" : "LOCKED")
+            : (isOn ? "ON" : "OFF");
+
+        return `
+            <div class="activity-item">
+                <div>
+                    <strong>${escapeHTML(actionText)}</strong>
+                    <small>${escapeHTML(time)}</small>
+                </div>
+
+                <span class="activity-result ${isOn ? "on" : "off"}">
+                    ${statusText}
+                </span>
+            </div>
+        `;
+    }).join("");
+}
+
 
 // ========================================
 // LOAD CUSTOMER HOME
@@ -172,17 +391,25 @@ return ` <div class="activity-item"> <div> <strong>
 async function loadCustomerHome(user) {
     cleanupListeners();
 
-    const assignmentRef = ref(database, `userHomes/${user.uid}`);
+    const assignmentRef = ref(
+        database,
+        `userHomes/${user.uid}`
+    );
 
     console.log("Logged-in UID:", user.uid);
     console.log("Assignment path:", assignmentRef.toString());
 
     let assignmentSnapshot;
 
+    // Load customer home assignment
     try {
         assignmentSnapshot = await get(assignmentRef);
     } catch (error) {
-        console.error("Assignment error:", error.code, error.message);
+        console.error(
+            "Assignment error:",
+            error.code,
+            error.message
+        );
 
         throw new Error(
             error.code === "PERMISSION_DENIED"
@@ -191,156 +418,532 @@ async function loadCustomerHome(user) {
         );
     }
 
-    // Assignment data yahan available hoga
-    const assignmentData = assignmentSnapshot.val();
+    console.log(
+        "Assignment exists:",
+        assignmentSnapshot.exists()
+    );
 
-    console.log("Assignment data:", assignmentData);
+    console.log(
+        "Assignment value:",
+        assignmentSnapshot.val()
+    );
 
-    // Apna baaki customer home wala code yahan likho
+    if (!assignmentSnapshot.exists()) {
+        throw new Error(
+            `Is account ko ghar assign nahi hai. Firebase mein userHomes/${user.uid} check karo.`
+        );
+    }
+
+    const homeId = assignmentSnapshot.val();
+
+    if (
+        typeof homeId !== "string" ||
+        !/^[A-Za-z0-9_-]+$/.test(homeId)
+    ) {
+        throw new Error("Assigned home ID galat hai.");
+    }
+
+    // Load home data
+    let homeSnapshot;
+
+    try {
+        homeSnapshot = await get(
+            ref(database, `homes/${homeId}`)
+        );
+    } catch (error) {
+        console.error(
+            "Home read error:",
+            error.code,
+            error.message
+        );
+
+        throw new Error(
+            error.code === "PERMISSION_DENIED"
+                ? "Home read permission denied. Firebase Rules check karo."
+                : "Home data load nahi hua."
+        );
+    }
+
+    if (!homeSnapshot.exists()) {
+        throw new Error(
+            `homes/${homeId} database mein nahi mila.`
+        );
+    }
+
+    const home = homeSnapshot.val() || {};
+
+    currentHomeId = homeId;
+
+    // Update home title
+    const homeTitle = document.querySelector(
+        ".welcome-card strong"
+    );
+
+    if (homeTitle) {
+        homeTitle.textContent = home.homeName || homeId;
+    }
+
+    const homeNameDisplay =
+        document.getElementById("homeNameDisplay");
+
+    if (homeNameDisplay) {
+        homeNameDisplay.textContent =
+            home.homeName || homeId;
+    }
+
+    const connectionText =
+        document.getElementById("connectionText");
+
+    if (connectionText) {
+        connectionText.textContent = "Firebase Connected";
+    }
+
+    // Listen to device states
+    unsubscribeDevices = onValue(
+        ref(database, `homes/${homeId}`),
+
+        snapshot => {
+            const currentHome = snapshot.val() || {};
+
+            for (const deviceId of Object.keys(devices)) {
+                deviceStates[deviceId] =
+                    currentHome[deviceId] === true;
+            }
+
+            renderDevices();
+        },
+
+        error => {
+            console.error(
+                "Device listener error:",
+                error.code,
+                error.message
+            );
+
+            showToast(
+                "Device status load nahi hua. Firebase Rules check karo."
+            );
+        }
+    );
+
+    // Listen to activity history
+    unsubscribeHistory = onValue(
+        ref(database, `homes/${homeId}/history`),
+
+        snapshot => {
+            const value = snapshot.val() || {};
+
+            const items = Object.entries(value)
+                .filter(([, item]) =>
+                    item && typeof item === "object"
+                )
+                .map(([id, item]) => ({
+                    id,
+                    ...item
+                }))
+                .sort(
+                    (a, b) =>
+                        Number(b.timestamp || 0) -
+                        Number(a.timestamp || 0)
+                )
+                .slice(0, 20);
+
+            renderHistory(items);
+        },
+
+        error => {
+            console.error(
+                "History listener error:",
+                error.code,
+                error.message
+            );
+        }
+    );
+
+    console.log("Assigned home loaded:", homeId);
+
+    renderDevices();
 }
 
-throw new Error( error.code === "PERMISSION_DENIED" ? "Database permission denied. Firebase Rules check karo." : "Customer assignment load nahi hua." ); }
 
-console.log("Assignment exists:", assignmentSnapshot.exists()); console.log("Assignment value:", assignmentSnapshot.val());
+// ========================================
+// LOGIN
+// ========================================
 
-if (!assignmentSnapshot.exists()) { throw new Error( Is account ko ghar assign nahi hai. Firebase mein userHomes/${user.uid} check karo. ); }
+if (loginForm) {
+    loginForm.addEventListener("submit", async event => {
+        event.preventDefault();
 
-const homeId = assignmentSnapshot.val();
+        const email = loginEmail.value.trim();
+        const password = loginPassword.value;
 
-if ( typeof homeId !== "string" || !/^[A-Za-z0-9_-]+$/.test(homeId) ) { throw new Error("Assigned home ID galat hai."); }
+        if (!email || !password) {
+            showMessage(
+                "Email aur password dono bharo.",
+                true
+            );
 
-let homeSnapshot;
+            return;
+        }
 
-try { homeSnapshot = await get(ref(database, homes/${homeId})); } catch (error) { console.error("Home read error:", error.code, error.message);
+        if (loginButton) {
+            loginButton.disabled = true;
+        }
 
-throw new Error( error.code === "PERMISSION_DENIED" ? "Home read permission denied. Firebase Rules check karo." : "Home data load nahi hua." ); }
+        showMessage("Logging in...");
 
-if (!homeSnapshot.exists()) { throw new Error(homes/${homeId} database mein nahi mila.); }
+        try {
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
 
-const home = homeSnapshot.val();
+            loginForm.reset();
 
-currentHomeId = homeId;
+        } catch (error) {
+            console.error(
+                "Login error:",
+                error.code,
+                error.message
+            );
 
-const homeTitle = document.querySelector(".welcome-card strong"); if (homeTitle) { homeTitle.textContent = home.homeName || homeId; }
+            const messages = {
+                "auth/invalid-credential":
+                    "Email ya password galat hai.",
 
-const homeNameDisplay = document.getElementById("homeNameDisplay"); if (homeNameDisplay) { homeNameDisplay.textContent = home.homeName || homeId; }
+                "auth/invalid-email":
+                    "Email address sahi nahi hai.",
 
-const connectionText = document.getElementById("connectionText"); if (connectionText) { connectionText.textContent = "Firebase Connected"; }
+                "auth/user-not-found":
+                    "Is email se account nahi mila.",
 
-// Listen to device states. unsubscribeDevices = onValue( ref(database, homes/${homeId}), snapshot => { const currentHome = snapshot.val() || {};
+                "auth/wrong-password":
+                    "Password galat hai.",
 
-for (const deviceId of Object.keys(devices)) { deviceStates[deviceId] = currentHome[deviceId] === true; }
+                "auth/too-many-requests":
+                    "Bahut attempts hue. Baad mein try karo.",
 
-renderDevices(); }, error => { console.error("Device listener error:", error.code, error.message); showToast("Device status load nahi hua. Firebase Rules check karo."); } );
+                "auth/network-request-failed":
+                    "Internet connection check karo.",
 
-// Listen to activity history. unsubscribeHistory = onValue( ref(database, homes/${homeId}/history), snapshot => { const value = snapshot.val() || {};
+                "auth/operation-not-allowed":
+                    "Firebase mein Email/Password sign-in enable karo.",
 
-const items = Object.entries(value) .filter(([, item]) => item && typeof item === "object") .map(([id, item]) => ({ id, ...item })) .sort((a, b) => Number(b.timestamp || 0) - Number(a.timestamp || 0)) .slice(0, 20);
+                "auth/invalid-api-key":
+                    "Firebase API key check karo."
+            };
 
-renderHistory(items); }, error => { console.error("History listener error:", error.code, error.message); } );
+            showMessage(
+                messages[error.code] ||
+                `Login failed: ${error.code || error.message}`,
+                true
+            );
 
-console.log("Assigned home loaded:", homeId); renderDevices(); }
+        } finally {
+            if (loginButton) {
+                loginButton.disabled = false;
+            }
+        }
+    });
 
-// ======================================== // LOGIN // ========================================
+} else {
+    console.error(
+        "HTML mein loginForm nahi mila."
+    );
+}
 
-if (loginForm) { loginForm.addEventListener("submit", async event => { event.preventDefault();
 
-const email = loginEmail.value.trim(); const password = loginPassword.value;
+// ========================================
+// LOGOUT BUTTON
+// ========================================
 
-if (!email || !password) { showMessage("Email aur password dono bharo.", true); return; }
+function createLogoutButton() {
+    let button = document.getElementById("logoutButton");
 
-if (loginButton) loginButton.disabled = true;
+    if (button) return;
 
-showMessage("Logging in...");
+    button = document.createElement("button");
 
-try { await signInWithEmailAndPassword(auth, email, password); loginForm.reset(); } catch (error) { console.error("Login error:", error.code, error.message);
+    button.id = "logoutButton";
+    button.type = "button";
+    button.className = "clear-button";
+    button.textContent = "Logout";
 
-const messages = { "auth/invalid-credential": "Email ya password galat hai.", "auth/invalid-email": "Email address sahi nahi hai.", "auth/user-not-found": "Is email se account nahi mila.", "auth/wrong-password": "Password galat hai.", "auth/too-many-requests": "Bahut attempts hue. Baad mein try karo.", "auth/network-request-failed": "Internet connection check karo.", "auth/operation-not-allowed": "Firebase mein Email/Password sign-in enable karo.", "auth/invalid-api-key": "Firebase API key check karo." };
+    const topbar = document.querySelector(".topbar");
 
-showMessage( messages[error.code] || Login failed: ${error.code || error.message}, true ); } finally { if (loginButton) loginButton.disabled = false; } }); } else { console.error("HTML mein loginForm nahi mila."); }
+    if (topbar) {
+        topbar.appendChild(button);
+    }
 
-// ======================================== // LOGOUT BUTTON // ========================================
+    button.addEventListener("click", async () => {
+        cleanupListeners();
 
-function createLogoutButton() { let button = document.getElementById("logoutButton");
+        try {
+            await signOut(auth);
 
-if (button) return;
+            showMessage("Logout successful.");
 
-button = document.createElement("button"); button.id = "logoutButton"; button.type = "button"; button.className = "clear-button"; button.textContent = "Logout";
+        } catch (error) {
+            console.error("Logout error:", error);
 
-const topbar = document.querySelector(".topbar");
+            showToast(
+                "Logout nahi hua. Dobara try karo."
+            );
+        }
+    });
+}
 
-if (topbar) { topbar.appendChild(button); }
+
+// ========================================
+// AUTHENTICATION STATE
+// ========================================
+
+onAuthStateChanged(
+    auth,
+
+    async user => {
+        const requestNumber = ++authRequestNumber;
 
-button.addEventListener("click", async () => { cleanupListeners();
-
-try { await signOut(auth); showMessage("Logout successful."); } catch (error) { console.error("Logout error:", error); showToast("Logout nahi hua. Dobara try karo."); } }); }
-
-// ======================================== // AUTHENTICATION STATE // ========================================
-
-onAuthStateChanged( auth, async user => { const requestNumber = ++authRequestNumber;
-
-cleanupListeners();
-
-if (!user) { if (authSection) authSection.hidden = false; if (dashboard) dashboard.hidden = true;
-
-const connectionText = document.getElementById("connectionText"); if (connectionText) { connectionText.textContent = "Login Required"; }
-
-console.log("SmartFix: No user logged in."); return; }
-
-try { await loadCustomerHome(user);
-
-if (requestNumber !== authRequestNumber) return;
-
-if (authSection) authSection.hidden = true; if (dashboard) dashboard.hidden = false;
-
-createLogoutButton();
-
-console.log("SmartFix logged in:", user.email, user.uid); } catch (error) { if (requestNumber !== authRequestNumber) return;
-
-console.error("Home loading error:", error);
-
-showMessage(error.message || "Dashboard load nahi hua.", true);
-
-if (authSection) authSection.hidden = false; if (dashboard) dashboard.hidden = true;
-
-try { await signOut(auth); } catch (logoutError) { console.error("Sign-out error:", logoutError); } } }, error => { console.error("Authentication state error:", error);
-
-showMessage( "Authentication check failed. Page refresh karke try karo.", true ); } );
-
-// ======================================== // MULTI-DEVICE CONTROL // ========================================
-
-document.querySelectorAll("[data-device]").forEach(button => { button.addEventListener("click", async () => { if (!currentHomeId || !auth.currentUser) { showToast("Pehle login karo."); return; }
-
-const deviceId = button.dataset.device;
-
-if (!Object.prototype.hasOwnProperty.call(devices, deviceId)) { showToast("Unknown device."); return; }
-
-const nextState = !deviceStates[deviceId];
-
-button.disabled = true;
-
-try { const timestamp = Date.now();
-
-await set( ref(database, homes/${currentHomeId}/${deviceId}), nextState );
-
-await set( ref(database, homes/${currentHomeId}/history/${timestamp}), { device: deviceId, name: devices[deviceId].name, state: nextState, timestamp } );
-
-showToast( ${devices[deviceId].name}: ${ deviceId === "mainDoor" ? (nextState ? "UNLOCKED" : "LOCKED") : (nextState ? "ON" : "OFF") } ); } catch (error) { console.error("Device update error:", error.code, error.message);
-
-showToast( error.code === "PERMISSION_DENIED" ? "Permission denied. Firebase Rules check karo." : "Device update nahi hua." ); } finally { button.disabled = false; } }); });
-
-// ======================================== // CLEAR HISTORY // ========================================
-
-if (clearHistory) { clearHistory.addEventListener("click", async () => { if (!currentHomeId || !auth.currentUser) { showToast("Pehle login karo."); return; }
-
-try { await set( ref(database, homes/${currentHomeId}/history), null );
-
-showToast("Activity history clear ho gayi."); } catch (error) { console.error("Clear history error:", error.code, error.message); showToast("History clear nahi hui. Firebase Rules check karo."); } }); }
-
-// ======================================== // CURRENT YEAR // ========================================
-
-const currentYear = document.getElementById("currentYear");
-
-if (currentYear) { currentYear.textContent = new Date().getFullYear(); }
-
-console.log("SmartFix Firebase application initialized.");
+        cleanupListeners();
+
+        if (!user) {
+            if (authSection) {
+                authSection.hidden = false;
+            }
+
+            if (dashboard) {
+                dashboard.hidden = true;
+            }
+
+            const connectionText =
+                document.getElementById("connectionText");
+
+            if (connectionText) {
+                connectionText.textContent = "Login Required";
+            }
+
+            console.log("SmartFix: No user logged in.");
+
+            return;
+        }
+
+        try {
+            await loadCustomerHome(user);
+
+            // Ignore an outdated authentication request
+            if (requestNumber !== authRequestNumber) {
+                cleanupListeners();
+                return;
+            }
+
+            if (authSection) {
+                authSection.hidden = true;
+            }
+
+            if (dashboard) {
+                dashboard.hidden = false;
+            }
+
+            createLogoutButton();
+
+            console.log(
+                "SmartFix logged in:",
+                user.email,
+                user.uid
+            );
+
+        } catch (error) {
+            if (requestNumber !== authRequestNumber) {
+                return;
+            }
+
+            console.error(
+                "Home loading error:",
+                error
+            );
+
+            showMessage(
+                error.message || "Dashboard load nahi hua.",
+                true
+            );
+
+            if (authSection) {
+                authSection.hidden = false;
+            }
+
+            if (dashboard) {
+                dashboard.hidden = true;
+            }
+
+            cleanupListeners();
+
+            try {
+                await signOut(auth);
+            } catch (logoutError) {
+                console.error(
+                    "Sign-out error:",
+                    logoutError
+                );
+            }
+        }
+    },
+
+    error => {
+        console.error(
+            "Authentication state error:",
+            error
+        );
+
+        showMessage(
+            "Authentication check failed. Page refresh karke try karo.",
+            true
+        );
+    }
+);
+
+
+// ========================================
+// MULTI-DEVICE CONTROL
+// ========================================
+
+document
+    .querySelectorAll("[data-device]")
+    .forEach(button => {
+        button.addEventListener("click", async () => {
+            if (!currentHomeId || !auth.currentUser) {
+                showToast("Pehle login karo.");
+                return;
+            }
+
+            const deviceId = button.dataset.device;
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    devices,
+                    deviceId
+                )
+            ) {
+                showToast("Unknown device.");
+                return;
+            }
+
+            const homeId = currentHomeId;
+            const nextState = !deviceStates[deviceId];
+
+            button.disabled = true;
+
+            try {
+                const timestamp = Date.now();
+
+                // Update device state
+                await set(
+                    ref(
+                        database,
+                        `homes/${homeId}/${deviceId}`
+                    ),
+                    nextState
+                );
+
+                // Save activity history
+                await set(
+                    ref(
+                        database,
+                        `homes/${homeId}/history/${timestamp}`
+                    ),
+                    {
+                        device: deviceId,
+                        name: devices[deviceId].name,
+                        state: nextState,
+                        timestamp
+                    }
+                );
+
+                const statusText =
+                    deviceId === "mainDoor"
+                        ? (nextState ? "UNLOCKED" : "LOCKED")
+                        : (nextState ? "ON" : "OFF");
+
+                showToast(
+                    `${devices[deviceId].name}: ${statusText}`
+                );
+
+            } catch (error) {
+                console.error(
+                    "Device update error:",
+                    error.code,
+                    error.message
+                );
+
+                showToast(
+                    error.code === "PERMISSION_DENIED"
+                        ? "Permission denied. Firebase Rules check karo."
+                        : "Device update nahi hua."
+                );
+
+            } finally {
+                button.disabled = false;
+            }
+        });
+    });
+
+
+// ========================================
+// CLEAR HISTORY
+// ========================================
+
+if (clearHistory) {
+    clearHistory.addEventListener("click", async () => {
+        if (!currentHomeId || !auth.currentUser) {
+            showToast("Pehle login karo.");
+            return;
+        }
+
+        const homeId = currentHomeId;
+
+        try {
+            await set(
+                ref(
+                    database,
+                    `homes/${homeId}/history`
+                ),
+                null
+            );
+
+            showToast("Activity history clear ho gayi.");
+
+        } catch (error) {
+            console.error(
+                "Clear history error:",
+                error.code,
+                error.message
+            );
+
+            showToast(
+                "History clear nahi hui. Firebase Rules check karo."
+            );
+        }
+    });
+}
+
+
+// ========================================
+// CURRENT YEAR
+// ========================================
+
+const currentYear =
+    document.getElementById("currentYear");
+
+if (currentYear) {
+    currentYear.textContent =
+        new Date().getFullYear();
+}
+
+
+// ========================================
+// APPLICATION INITIALIZED
+// ========================================
+
+console.log(
+    "SmartFix Firebase application initialized."
+);
