@@ -762,6 +762,8 @@ onAuthStateChanged(
         cleanupListeners();
 
         if (!user) {
+            document.body.classList.remove("logged-in");
+
             if (authSection) {
                 authSection.hidden = false;
             }
@@ -785,11 +787,14 @@ onAuthStateChanged(
         try {
             await loadCustomerHome(user);
 
-            // Ignore an outdated authentication request
+            // Ignore outdated authentication requests
             if (requestNumber !== authRequestNumber) {
                 cleanupListeners();
                 return;
             }
+
+            // Hide login and display dashboard
+            document.body.classList.add("logged-in");
 
             if (authSection) {
                 authSection.hidden = true;
@@ -797,6 +802,13 @@ onAuthStateChanged(
 
             if (dashboard) {
                 dashboard.hidden = false;
+            }
+
+            const connectionText =
+                document.getElementById("connectionText");
+
+            if (connectionText) {
+                connectionText.textContent = "Firebase Connected";
             }
 
             createLogoutButton();
@@ -812,10 +824,9 @@ onAuthStateChanged(
                 return;
             }
 
-            console.error(
-                "Home loading error:",
-                error
-            );
+            console.error("Home loading error:", error);
+
+            document.body.classList.remove("logged-in");
 
             showMessage(
                 error.message || "Dashboard load nahi hua.",
@@ -835,19 +846,13 @@ onAuthStateChanged(
             try {
                 await signOut(auth);
             } catch (logoutError) {
-                console.error(
-                    "Sign-out error:",
-                    logoutError
-                );
+                console.error("Sign-out error:", logoutError);
             }
         }
     },
 
     error => {
-        console.error(
-            "Authentication state error:",
-            error
-        );
+        console.error("Authentication state error:", error);
 
         showMessage(
             "Authentication check failed. Page refresh karke try karo.",
@@ -855,8 +860,6 @@ onAuthStateChanged(
         );
     }
 );
-
-
 // ========================================
 // MULTI-DEVICE CONTROL
 // ========================================
