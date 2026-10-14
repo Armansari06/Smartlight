@@ -383,6 +383,60 @@ function renderHistory(items) {
     }).join("");
 }
 
+// ========================================
+// KEEP ONLY LATEST 50 HISTORY RECORDS
+// ========================================
+
+async function trimHistory(homeId) {
+    try {
+        const historyRef = ref(
+            database,
+            `homes/${homeId}/history`
+        );
+
+        const snapshot = await get(historyRef);
+
+        if (!snapshot.exists()) {
+            return;
+        }
+
+        const entries = Object.entries(snapshot.val() || {})
+            .filter(([, item]) =>
+                item && typeof item === "object"
+            )
+            .sort((a, b) =>
+                Number(b[1].timestamp || 0) -
+                Number(a[1].timestamp || 0)
+            );
+
+        // Keep the latest 50 records
+        const oldEntries = entries.slice(50);
+
+        // Delete records older than the latest 50
+        for (const [recordId] of oldEntries) {
+            await set(
+                ref(
+                    database,
+                    `homes/${homeId}/history/${recordId}`
+                ),
+                null
+            );
+        }
+
+        console.log(
+            "History cleanup complete. Records found:",
+            Math.min(entries.length, 50)
+        );
+
+    } catch (error) {
+        console.error(
+            "History cleanup error:",
+            error.code,
+            error.message
+        );
+    }
+}
+
 
 // ========================================
 // LOAD CUSTOMER HOME
@@ -846,18 +900,30 @@ document
                 );
 
                 // Save activity history
-                await set(
-                    ref(
-                        database,
-                        `homes/${homeId}/history/${timestamp}`
-                    ),
-                    {
-                        device: deviceId,
-                        name: devices[deviceId].name,
-                        state: nextState,
-                        timestamp
-                    }
-                );
+await set(
+    ref(
+        database,
+        `homes/${homeId}/history/${timestamp}`
+    ),
+    {
+        device: deviceId,
+        name: devices[deviceId].name,
+        state: nextState,
+        timestamp
+    }
+);
+
+// Keep only the latest 50 history records
+await trimHistory(homeId);
+
+const statusText =
+    deviceId === "mainDoor"
+        ? (nextState ? "UNLOCKED" : "LOCKED")
+        : (nextState ? "ON" : "OFF");
+
+showToast(
+    `${devices[deviceId].name}: ${statusText}`
+);
 
                 const statusText =
                     deviceId === "mainDoor"
