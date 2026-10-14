@@ -735,3 +735,14 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 [hidden] {
     display: none !important;
 }
+body:not(.logged-in) #dashboardSection {
+    display: none !important;
+}
+
+body.logged-in #authSection {
+    display: none !important;
+}
+
+body.logged-in #dashboardSection {
+    display: block !important;
+}
