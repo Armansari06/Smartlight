@@ -814,3 +814,22 @@ body.logged-in #dashboardSection:not([hidden]) { display: block; }
 .power-button { min-height: 39px; font-size: 8px; }
 
 .light-visual, .device-visual { min-height: 110px; } }
+/* FIX: Align all device buttons on mobile */
+
+@media (max-width: 650px) {
+
+.device-card { display: flex; flex-direction: column; }
+
+.device-header { min-height: 85px; }
+
+.light-visual, .device-visual { min-height: 125px; margin-top: 12px; margin-bottom: 12px; }
+
+.device-controls { margin-top: auto; }
+
+.device-note { margin-top: 10px; } }
+
+@media (max-width: 380px) {
+
+.device-header { min-height: 80px; }
+
+.light-visual, .device-visual { min-height: 110px; } }
