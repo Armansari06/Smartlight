@@ -75,7 +75,7 @@
 
 <div class="welcome-card-icon">⌂</div>
 
-<div> <small>YOUR SPACE</small> <strong>My Home</strong> <span>4 devices configured</span> </div>
+<div> <small>YOUR SPACE</small> <strong>My Home</strong> <span>5 devices configured</span> </div>
 
 </div>
 
@@ -87,7 +87,7 @@
 
 <div class="summary-icon blue-icon">⌂</div>
 
-<div class="summary-info"> <span>Registered Devices</span> <strong>04</strong> </div>
+<div class="summary-info"> <span>Registered Devices</span> <strong>05</strong> </div>
 
 <span class="summary-indicator">DEVICES</span>
 
@@ -105,13 +105,17 @@
 
 </section>
 
-<!-- DEVICE CONTROLS --> <section class="control-section">
+<!-- DEVICE CONTROLS -->
+ 
+ 
+
+<section class="control-section">
 
 <div class="section-heading">
 
 <div> <span class="eyebrow">YOUR DEVICES</span> <h2>Device Control</h2> </div>
 
-<span class="device-count">04 DEVICES</span>
+<span class="device-count">05 DEVICES</span>
 
 </div>
 
@@ -152,6 +156,52 @@
 <button type="button" class="power-button" data-device="livingRoomLight" aria-pressed="false" > <span class="power-symbol">⏻</span> <span class="device-button-text">TURN ON</span> </button>
 
 </div>
+
+</article>
+
+<!-- TV CONTROL -->
+
+<article class="device-card">
+
+<div class="device-header">
+    <div class="device-title">
+        <div class="device-icon">📺</div>
+        <div>
+            <h3>Smart TV</h3>
+            <p>TV power control</p>
+        </div>
+    </div>
+
+    <span class="device-badge" id="tvBadge">OFF</span>
+</div>
+
+<div class="device-visual">
+    <div class="bulb-icon">📺</div>
+    <span class="visual-status" id="tvVisualStatus">
+        TV IS OFF
+    </span>
+    <p id="tvVisualDescription">
+        Your TV is switched off.
+    </p>
+</div>
+
+<div class="device-controls">
+    <div class="control-description">
+        <strong>TV Control</strong>
+        <span>Turn the TV on or off.</span>
+    </div>
+
+    <button
+        type="button"
+        class="power-button"
+        data-device="tv"
+        aria-pressed="false"
+    >
+        <span class="power-symbol">⏻</span>
+        <span class="device-button-text">TURN ON</span>
+    </button>
+</div>
+
 
 </article>
 
@@ -227,6 +277,75 @@
 
 </article>
 
+<!-- WATER TANK MOTOR -->
+<div class="device-card" id="motorCard">
+
+    <div class="device-header">
+        <div class="device-title">
+            <div class="device-icon">💧</div>
+
+            <div>
+                <h3>Water Tank Motor</h3>
+                <p>Water Filling System</p>
+            </div>
+        </div>
+
+        <div class="device-badge" id="motorBadge">
+            <span class="badge-dot"></span>
+            <span id="motorBadgeText">OFFLINE</span>
+        </div>
+    </div>
+
+    <!-- WATER LEVEL VISUAL -->
+    <div class="device-visual motor-visual">
+
+        <div class="tank-container">
+            <div class="tank-water" id="tankWater"></div>
+
+            <div class="tank-percentage" id="tankPercentage">
+                --%
+            </div>
+        </div>
+
+        <div class="visual-status" id="motorStatus">
+            MOTOR OFF
+        </div>
+
+        <p id="tankDescription">
+            Connect ESP32 and water sensor
+        </p>
+    </div>
+
+    <!-- MOTOR CONTROL -->
+    <div class="device-controls">
+
+        <div class="control-description">
+            <strong>Motor Control</strong>
+            <span>Manually start water filling</span>
+        </div>
+
+        <button type="button" class="power-button" id="motorButton" data-device="waterMotor" aria-pressed="false"
+
+<span class="power-symbol">⏻</span>
+<span class="device-button-text">TURN ON</span>
+
+
+</button>
+
+    </div>
+
+    <!-- AUTO OFF STATUS -->
+    <div class="device-note motor-note">
+        <span>🛡️</span>
+
+        <p id="motorAutoOff">
+            Auto OFF will activate when the tank-full sensor is connected.
+        </p>
+    </div>
+
+</div>
+
+
 <!-- MAIN DOOR --> <article class="device-card">
 
 <div class="device-header">
@@ -273,7 +392,7 @@
 
 <div class="info-row"> <span>Home</span> <strong id="homeNameDisplay">My Home</strong> </div>
 
-<div class="info-row"> <span>Registered devices</span> <strong>4</strong> </div>
+<div class="info-row"> <span>Registered devices</span> <strong>5</strong> </div>
 
 <div class="info-row"> <span>Controller</span> <strong>ESP32</strong> </div>
 
