@@ -697,28 +697,28 @@ if (loginForm) {
 
             const messages = {
                 "auth/invalid-credential":
-                    "Email ya password galat hai.",
+                    "Email or Password is incorrect.",
 
                 "auth/invalid-email":
-                    "Email address sahi nahi hai.",
+                    "Email address is incorrect.",
 
                 "auth/user-not-found":
-                    "Is email se account nahi mila.",
+                    "Email address did't match.",
 
                 "auth/wrong-password":
-                    "Password galat hai.",
+                    "Password is incorrrect.",
 
                 "auth/too-many-requests":
-                    "Bahut attempts hue. Baad mein try karo.",
+                    "Maximum attempts reached, try later.",
 
                 "auth/network-request-failed":
-                    "Internet connection check karo.",
+                    "Check your Internet connection.",
 
                 "auth/operation-not-allowed":
-                    "Firebase mein Email/Password sign-in enable karo.",
+                    "Enable Email/Password in Firebase for sign-in.",
 
                 "auth/invalid-api-key":
-                    "Firebase API key check karo."
+                    "Check Firebase API key."
             };
 
             showMessage(
