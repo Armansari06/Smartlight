@@ -517,7 +517,7 @@ async function loadCustomerHome(user) {
 
     if (!assignmentSnapshot.exists()) {
         throw new Error(
-            `Is account ko ghar assign nahi hai. Firebase mein userHomes/${user.uid} check karo.`
+            `Is account ko ghar assign nahi hai. Firebase mein userhomes/${user.uid} check karo.`
         );
     }
 
