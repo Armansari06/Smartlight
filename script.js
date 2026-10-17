@@ -75,7 +75,9 @@ const deviceStates = {
     livingRoomLight: false,
     fan: false,
     bedroomLight: false,
-    mainDoor: false
+    mainDoor: false,
+    tv: false,
+    waterMotor: false
 };
 
 
@@ -110,7 +112,22 @@ const devices = {
         badge: "mainDoorBadge",
         onLabel: "UNLOCKED",
         offLabel: "LOCKED"
-    }
+    },
+    tv: {
+    name: "Smart TV",
+    badge: "tvBadge",
+    onLabel: "ON",
+    offLabel: "OFF"
+},
+
+waterMotor: {
+    name: "Water Motor",
+    badge: "motorBadgeText",
+    onLabel: "ON",
+    offLabel: "OFF"
+}
+
+    
 };
 
 
@@ -292,7 +309,15 @@ function renderDevices() {
 
         doorVisualStatus: deviceStates.mainDoor
             ? "DOOR IS UNLOCKED"
-            : "DOOR IS LOCKED"
+            : "DOOR IS LOCKED",
+
+            tvVisualStatus: deviceStates.tv
+        ? "TV IS ON"
+        : "TV IS OFF",
+
+        waterMotorVisualStatus: deviceStates.waterMotor
+    ? "MOTOR IS ON"
+    : "MOTOR IS OFF"
     };
 
     for (const [elementId, text] of Object.entries(extraStatuses)) {
@@ -314,7 +339,15 @@ function renderDevices() {
 
         doorVisualDescription: deviceStates.mainDoor
             ? "The recorded door status is unlocked."
-            : "The recorded door status is locked."
+            : "The recorded door status is locked.",
+
+            tvVisualDescription: deviceStates.tv
+    ? "Your TV is switched on."
+    : "Your TV is switched off.",
+
+    waterMotorVisualDescription: deviceStates.waterMotor
+    ? "Water motor is running."
+    : "Water motor is stopped."
     };
 
     for (const [elementId, text] of Object.entries(extraDescriptions)) {
@@ -1006,3 +1039,62 @@ if (currentYear) {
 console.log(
     "SmartFix Firebase application initialized."
 );
+console.log(
+    "SmartFix Firebase application initialized."
+);
+
+
+// ==========================================
+// WATER MOTOR — UI DEMO ONLY
+// Not connected to actual hardware
+// ==========================================
+
+let waterMotorOn = false;
+
+function toggleWaterMotor() {
+    const button = document.getElementById("motorButton");
+    const buttonText = document.getElementById("motorButtonText");
+    const motorStatus = document.getElementById("motorStatus");
+    const tankDescription = document.getElementById("tankDescription");
+    const motorAutoOff = document.getElementById("motorAutoOff");
+
+    if (!button || !buttonText || !motorStatus) {
+        return;
+    }
+
+    waterMotorOn = !waterMotorOn;
+
+    if (waterMotorOn) {
+        buttonText.textContent = "MOTOR OFF";
+        motorStatus.textContent = "MOTOR ON";
+
+        button.classList.add("motor-running");
+
+        if (tankDescription) {
+            tankDescription.textContent =
+                "Demo mode: waiting for sensor connection";
+        }
+
+        if (motorAutoOff) {
+            motorAutoOff.textContent =
+                "Automatic OFF is not active until the ESP32 and tank-full sensor are connected.";
+        }
+    } else {
+        buttonText.textContent = "MOTOR ON";
+        motorStatus.textContent = "MOTOR OFF";
+
+        button.classList.remove("motor-running");
+
+        if (tankDescription) {
+            tankDescription.textContent =
+                "Motor stopped in demo mode";
+        }
+
+        if (motorAutoOff) {
+            motorAutoOff.textContent =
+                "Connect the ESP32 and sensor to enable automatic shutoff.";
+        }
+    }
+}
+window.toggleWaterMotor = toggleWaterMotor;
+
